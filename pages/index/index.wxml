@@ -1,0 +1,5 @@
+<view class="container">
+  <view class="text-center mt-20">
+    <text>欢迎来到故事书小程序</text>
+  </view>
+</view>
