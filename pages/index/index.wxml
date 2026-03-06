@@ -8,8 +8,64 @@
     </view>
   </view>
 
-  <!-- 功能卡片 -->
-  <view class="function-grid">
+  <!-- 今日重点（突出显示） -->
+  <view class="today-section">
+    <!-- 今日读书 -->
+    <view class="today-card today-books" bindtap="viewTodayBooks" wx:if="{{todayRecords.length > 0}}">
+      <view class="card-header">
+        <text class="card-icon">📖</text>
+        <text class="card-title">今日读书</text>
+      </view>
+      <view class="card-content">
+        <view class="book-list">
+          <view class="book-item" wx:for="{{todayRecords}}" wx:key="id">
+            <text class="book-name">{{item.bookName}}</text>
+            <text class="book-pages" wx:if="{{item.endPage > item.startPage}}">P{{item.startPage}}-{{item.endPage}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+    <view class="today-card today-books" wx:else>
+      <view class="card-header">
+        <text class="card-icon">📖</text>
+        <text class="card-title">今日读书</text>
+      </view>
+      <view class="card-empty">
+        <text class="empty-tip">今天还没读书哦~</text>
+        <button class="quick-add-btn" bindtap="addRecord">立即添加</button>
+      </view>
+    </view>
+
+    <!-- 今日复习 -->
+    <view class="today-card today-review" bindtap="viewTodayReview" wx:if="{{todayReviewTasks.length > 0}}">
+      <view class="card-header">
+        <text class="card-icon">⏰</text>
+        <text class="card-title">今日复习</text>
+        <text class="review-count">{{todayReviewTasks.length}}本待复习</text>
+      </view>
+      <view class="card-content">
+        <view class="task-list">
+          <view class="task-item" wx:for="{{todayReviewTasks}}" wx:key="id">
+            <text class="task-book">{{item.bookName}}</text>
+            <text class="task-stage">第{{item.stage}}次</text>
+          </view>
+        </view>
+        <button class="go-review-btn" bindtap="viewReviewTasks" catchtap="stopPropagation">开始复习</button>
+      </view>
+    </view>
+    <view class="today-card today-review" wx:else>
+      <view class="card-header">
+        <text class="card-icon">⏰</text>
+        <text class="card-title">今日复习</text>
+      </view>
+      <view class="card-empty">
+        <text class="empty-tip">太棒了！今天没有复习任务 🎉</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 功能卡片（弱化） -->
+  <view class="function-grid faded">
     <view class="function-card" bindtap="goToCalendar">
       <view class="card-icon">📅</view>
       <view class="card-title">阅读日历</view>
@@ -28,15 +84,15 @@
       <view class="card-desc">艾宾浩斯记忆法复习计划</view>
     </view>
 
-    <view class="function-card" bindtap="searchBook">
-      <view class="card-icon">🔍</view>
-      <view class="card-title">搜索图书</view>
-      <view class="card-desc">查找图书信息和详情</view>
+    <view class="function-card" bindtap="goToSettings">
+      <view class="card-icon">⚙️</view>
+      <view class="card-title">设置</view>
+      <view class="card-desc">管理自动生成复习任务</view>
     </view>
   </view>
 
-  <!-- 统计信息 -->
-  <view class="stats-section">
+  <!-- 统计信息（弱化） -->
+  <view class="stats-section faded">
     <view class="stats-title">阅读统计</view>
     <view class="stats-cards">
       <view class="stat-card">
@@ -54,8 +110,8 @@
     </view>
   </view>
 
-  <!-- 最近记录 -->
-  <view class="recent-section">
+  <!-- 最近记录（弱化） -->
+  <view class="recent-section faded">
     <view class="section-header">
       <text class="section-title">最近记录</text>
       <text class="view-all" bindtap="viewAllRecords">查看全部</text>

@@ -183,6 +183,12 @@ Page({
 
   // 创建复习任务
   createReviewTask(record) {
+    // 检查全局开关，如果关闭则不自动生成
+    const app = getApp()
+    if (!app.globalData.autoGenerateReview) {
+      return
+    }
+    
     const allTasks = wx.getStorageSync('reviewTasks') || {}
     
     // 艾宾浩斯记忆法复习周期（天）

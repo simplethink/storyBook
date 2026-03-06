@@ -7,12 +7,34 @@ Page({
       totalDays: 0,
       pendingReviews: 0
     },
+    todayRecords: [],
+    todayReviewTasks: [],
     recentRecords: []
   },
 
   onLoad() {
+    this.loadTodayData()
     this.loadStats()
     this.loadRecentRecords()
+  },
+
+  // 加载今天的数据（读书和复习任务）
+  loadTodayData() {
+    const allRecords = wx.getStorageSync('readingRecords') || {}
+    const allTasks = wx.getStorageSync('reviewTasks') || {}
+    const today = new Date().toDateString()
+    
+    // 获取今天的阅读记录
+    const todayRecords = allRecords[today] || []
+    
+    // 获取今天的复习任务
+    const todayTasks = allTasks[today] || []
+    const pendingReviews = todayTasks.filter(t => !t.completed)
+    
+    this.setData({
+      todayRecords,
+      todayReviewTasks: pendingReviews
+    })
   },
 
   // 加载统计数据
@@ -104,6 +126,29 @@ Page({
     })
   },
 
+  // 跳转到设置页面
+  goToSettings() {
+    wx.navigateTo({
+      url: '/pages/settings/settings'
+    })
+  },
+
+  // 查看今日读书详情
+  viewTodayBooks() {
+    const today = new Date().toDateString()
+    wx.navigateTo({
+      url: `/pages/recordDetail/recordDetail?date=${encodeURIComponent(today)}`
+    })
+  },
+
+  // 查看今日复习详情
+  viewTodayReview() {
+    const today = new Date().toDateString()
+    wx.navigateTo({
+      url: `/pages/recordDetail/recordDetail?date=${encodeURIComponent(today)}`
+    })
+  },
+
   // 查看全部记录
   viewAllRecords() {
     wx.navigateTo({
@@ -120,6 +165,7 @@ Page({
   },
 
   onShow() {
+    this.loadTodayData()
     this.loadStats()
     this.loadRecentRecords()
   }

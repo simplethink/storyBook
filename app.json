@@ -5,7 +5,8 @@
     "pages/recordDetail/recordDetail",
     "pages/editRecord/editRecord",
     "pages/addReviewTask/addReviewTask",
-    "pages/viewRecord/viewRecord"
+    "pages/viewRecord/viewRecord",
+    "pages/settings/settings"
   ],
   "window": {
     "backgroundTextStyle": "light",

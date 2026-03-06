@@ -1,0 +1,32 @@
+<view class="settings-container">
+  <!-- 设置卡片 -->
+  <view class="setting-card">
+    <view class="card-header">
+      <text class="card-title">复习任务设置</text>
+    </view>
+    
+    <view class="setting-item">
+      <view class="setting-content">
+        <view class="setting-info">
+          <text class="setting-label">自动生成复习任务</text>
+          <text class="setting-desc">开启后，添加阅读记录时会自动创建艾宾浩斯复习计划</text>
+        </view>
+        <switch 
+          checked="{{autoGenerateReview}}" 
+          bindchange="onToggleAutoGenerate"
+          color="#667eea"
+        />
+      </view>
+    </view>
+  </view>
+
+  <!-- 说明卡片 -->
+  <view class="info-card">
+    <view class="info-title">💡 艾宾浩斯记忆法</view>
+    <view class="info-content">
+      <text>根据艾宾浩斯遗忘曲线，系统会在以下时间点自动生成复习任务：</text>
+      <text class="highlight">1 天后、2 天后、4 天后、7 天后、15 天后</text>
+      <text class="tip">关闭开关后，仍可手动添加复习任务</text>
+    </view>
+  </view>
+</view>
