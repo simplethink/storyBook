@@ -1,0 +1,62 @@
+<view class="add-task-container">
+  <view class="form-section">
+    <view class="form-group">
+      <view class="form-label">图书名称 <text class="required">*</text></view>
+      <input 
+        class="form-input" 
+        placeholder="请输入图书名称" 
+        value="{{bookName}}"
+        bindinput="onBookNameInput"
+      />
+    </view>
+
+    <view class="form-group">
+      <view class="form-label">复习阶段</view>
+      <picker 
+        mode="selector" 
+        range="{{stages}}" 
+        value="{{stageIndex}}"
+        bindchange="onStageChange"
+      >
+        <view class="picker-value">
+          {{stages[stageIndex]}}
+        </view>
+      </picker>
+    </view>
+
+    <view class="form-group">
+      <view class="form-label">计划复习日期</view>
+      <picker 
+        mode="date" 
+        value="{{reviewDate}}"
+        start="{{minDate}}"
+        bindchange="onDateChange"
+      >
+        <view class="picker-value">
+          {{formatDate(reviewDate)}}
+        </view>
+      </picker>
+    </view>
+
+    <view class="form-group">
+      <view class="form-label">备注</view>
+      <textarea 
+        class="form-textarea" 
+        placeholder="可选，添加一些提醒内容..." 
+        value="{{note}}"
+        maxlength="200"
+        bindinput="onNoteInput"
+      />
+    </view>
+
+    <view class="info-card">
+      <view class="info-title">💡 艾宾浩斯记忆法</view>
+      <view class="info-content">
+        <text>根据艾宾浩斯遗忘曲线，最佳复习时间为：</text>
+        <text class="highlight">1 天后、2 天后、4 天后、7 天后、15 天后</text>
+      </view>
+    </view>
+
+    <button class="save-btn" bindtap="saveTask" disabled="{{!bookName}}">添加复习任务</button>
+  </view>
+</view>

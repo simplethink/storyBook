@@ -32,17 +32,27 @@
     "minifyWXML": true,
     "babelSetting": {
       "ignore": [],
-      "disablePlugins": false,
+      "disablePlugins": [],
       "outputPath": ""
-    }
+    },
+    "compileWorklet": false,
+    "uglifyFileName": false,
+    "packNpmRelationList": [],
+    "localPlugins": false,
+    "disableUseStrict": false,
+    "useCompilerPlugins": false,
+    "condition": false,
+    "swc": false,
+    "disableSWC": true
   },
   "compileType": "mini-program",
   "libVersion": "3.3.4",
-  "appid": "wxb1234567890abcde",
+  "appid": "wx7bc4f76d2be44c22",
   "projectname": "storybook",
   "condition": {},
   "editorSetting": {
     "tabIndent": "insertSpaces",
     "tabSize": 2
-  }
+  },
+  "simulatorPluginLibVersion": {}
 }

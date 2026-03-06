@@ -1,0 +1,40 @@
+<!--pages/viewRecord/viewRecord.wxml-->
+<view class="detail-container">
+  <view class="cover-section">
+    <image class="book-cover" src="{{record.coverUrl}}" mode="aspectFill" wx:if="{{record.coverUrl}}"></image>
+    <view class="no-cover" wx:else>
+      <text class="no-cover-icon">📚</text>
+      <text class="no-cover-text">暂无封面</text>
+    </view>
+  </view>
+
+  <view class="info-section">
+    <view class="book-title">{{record.bookName}}</view>
+    <view class="book-author" wx:if="{{record.author}}">作者：{{record.author}}</view>
+    
+    <view class="meta-grid">
+      <view class="meta-item">
+        <view class="meta-label">阅读页码</view>
+        <view class="meta-value">P{{record.startPage}} - P{{record.endPage}}</view>
+      </view>
+      <view class="meta-item">
+        <view class="meta-label">阅读时长</view>
+        <view class="meta-value">{{record.duration}}分钟</view>
+      </view>
+      <view class="meta-item">
+        <view class="meta-label">阅读日期</view>
+        <view class="meta-value">{{formatDate(record.dateStr)}}</view>
+      </view>
+    </view>
+
+    <view class="note-section" wx:if="{{record.note}}">
+      <view class="note-title">读书笔记</view>
+      <view class="note-content">{{record.note}}</view>
+    </view>
+  </view>
+
+  <view class="action-buttons">
+    <button class="action-btn edit-btn" bindtap="editRecord">编辑</button>
+    <button class="action-btn delete-btn" bindtap="deleteRecord">删除</button>
+  </view>
+</view>

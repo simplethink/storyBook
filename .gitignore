@@ -1,0 +1,32 @@
+# 微信小程序目录结构
+.DS_Store
+.idea/
+*.iml
+.vscode/
+*.swp
+*.swo
+*~
+
+# 编译产物
+dist/
+build/
+*.min.js
+*.min.wxss
+
+# 临时文件
+tmp/
+temp/
+*.log
+
+# 依赖包
+node_modules/
+package-lock.json
+yarn.lock
+
+# 配置文件备份
+*.bak
+*.backup
+
+# 系统文件
+Thumbs.db
+.DS_Store

@@ -1,5 +1,82 @@
-<view class="container">
-  <view class="text-center mt-20">
-    <text>欢迎来到故事书小程序</text>
+<!--pages/index/index.wxml-->
+<view class="home-container">
+  <!-- 欢迎头部 -->
+  <view class="home-header">
+    <view class="welcome-text">
+      <text class="title">故事书</text>
+      <text class="subtitle">记录你的阅读时光</text>
+    </view>
+  </view>
+
+  <!-- 功能卡片 -->
+  <view class="function-grid">
+    <view class="function-card" bindtap="goToCalendar">
+      <view class="card-icon">📅</view>
+      <view class="card-title">阅读日历</view>
+      <view class="card-desc">查看和管理每日阅读记录</view>
+    </view>
+
+    <view class="function-card" bindtap="addRecord">
+      <view class="card-icon">📖</view>
+      <view class="card-title">添加记录</view>
+      <view class="card-desc">快速记录今天的阅读</view>
+    </view>
+
+    <view class="function-card" bindtap="viewReviewTasks">
+      <view class="card-icon">⏰</view>
+      <view class="card-title">复习提醒</view>
+      <view class="card-desc">艾宾浩斯记忆法复习计划</view>
+    </view>
+
+    <view class="function-card" bindtap="searchBook">
+      <view class="card-icon">🔍</view>
+      <view class="card-title">搜索图书</view>
+      <view class="card-desc">查找图书信息和详情</view>
+    </view>
+  </view>
+
+  <!-- 统计信息 -->
+  <view class="stats-section">
+    <view class="stats-title">阅读统计</view>
+    <view class="stats-cards">
+      <view class="stat-card">
+        <view class="stat-value">{{stats.totalBooks}}</view>
+        <view class="stat-label">已读书籍</view>
+      </view>
+      <view class="stat-card">
+        <view class="stat-value">{{stats.totalDays}}</view>
+        <view class="stat-label">坚持天数</view>
+      </view>
+      <view class="stat-card">
+        <view class="stat-value">{{stats.pendingReviews}}</view>
+        <view class="stat-label">待复习</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 最近记录 -->
+  <view class="recent-section">
+    <view class="section-header">
+      <text class="section-title">最近记录</text>
+      <text class="view-all" bindtap="viewAllRecords">查看全部</text>
+    </view>
+    <view class="recent-list" wx:if="{{recentRecords.length > 0}}">
+      <view 
+        class="recent-item"
+        wx:for="{{recentRecords}}"
+        wx:key="id"
+        bindtap="viewRecordDetail"
+        data-record="{{item}}"
+      >
+        <image class="recent-cover" src="{{item.coverUrl}}" mode="aspectFill" wx:if="{{item.coverUrl}}"></image>
+        <view class="recent-info" wx:if="{{!item.coverUrl}}">
+          <text class="recent-book">{{item.bookName}}</text>
+          <text class="recent-date">{{item.dateStr}}</text>
+        </view>
+      </view>
+    </view>
+    <view class="empty-recent" wx:else>
+      <text class="empty-text">暂无阅读记录，快去添加吧~</text>
+    </view>
   </view>
 </view>
