@@ -12,6 +12,7 @@ Page({
     startPage: 0,
     endPage: 0,
     duration: 30,
+    readingTime: '', // 阅读时间
     note: '',
     recordId: ''
   },
@@ -20,6 +21,14 @@ Page({
     this.setData({ 
       date: decodeURIComponent(options.date || new Date().toDateString()),
       recordId: options.recordId
+    })
+
+    // 设置默认阅读时间为当前时间
+    const now = new Date()
+    const hours = String(now.getHours()).padStart(2, '0')
+    const minutes = String(now.getMinutes()).padStart(2, '0')
+    this.setData({
+      readingTime: `${hours}:${minutes}`
     })
 
     // 如果有传入的图书信息
@@ -102,6 +111,10 @@ Page({
     this.setData({ bookName: e.detail.value })
   },
 
+  onIsbnInput(e) {
+    this.setData({ isbn: e.detail.value })
+  },
+
   onAuthorInput(e) {
     this.setData({ author: e.detail.value })
   },
@@ -118,6 +131,36 @@ Page({
     this.setData({ duration: parseInt(e.detail.value) || 0 })
   },
 
+  onReadingTimeChange(e) {
+    this.setData({ readingTime: e.detail.value })
+  },
+
+  // 扫描 ISBN 条形码
+  async scanISBN() {
+    try {
+      const res = await wx.scanCode({
+        scanType: ['barCode']
+      })
+      
+      if (res.result) {
+        this.setData({
+          isbn: res.result
+        })
+        wx.showToast({
+          title: '扫描成功',
+          icon: 'success'
+        })
+      }
+    } catch (err) {
+      if (err.errMsg !== 'scanCode:fail cancel') {
+        wx.showToast({
+          title: '扫描失败',
+          icon: 'none'
+        })
+      }
+    }
+  },
+
   onNoteInput(e) {
     this.setData({ note: e.detail.value })
   },
@@ -126,7 +169,7 @@ Page({
   saveRecord() {
     const { 
       date, coverUrl, bookName, author, isbn, 
-      startPage, endPage, duration, note, recordId 
+      startPage, endPage, duration, readingTime, note, recordId 
     } = this.data
 
     if (!bookName) {
@@ -149,6 +192,7 @@ Page({
       startPage,
       endPage,
       duration,
+      readingTime,
       note,
       createTime: recordId ? dayRecords.find(r => r.id === recordId)?.createTime : Date.now(),
       updateTime: Date.now()

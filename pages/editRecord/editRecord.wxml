@@ -32,12 +32,18 @@
 
     <view class="form-group">
       <view class="form-label">ISBN</view>
-      <input 
-        class="form-input" 
-        placeholder="ISBN 条形码" 
-        value="{{isbn}}"
-        disabled="{{!!isbn}}"
-      />
+      <view class="isbn-input-wrapper">
+        <input 
+          class="form-input" 
+          placeholder="请输入或扫描 ISBN 条形码" 
+          value="{{isbn}}"
+          bindinput="onIsbnInput"
+        />
+        <view class="scan-btn" bindtap="scanISBN">
+          <text class="scan-icon">📷</text>
+          <text class="scan-text">扫码</text>
+        </view>
+      </view>
     </view>
 
     <!-- 阅读进度 -->
@@ -73,6 +79,19 @@
         value="{{duration}}"
         bindinput="onDurationInput"
       />
+    </view>
+
+    <view class="form-group">
+      <view class="form-label">阅读时间</view>
+      <picker 
+        mode="time" 
+        value="{{readingTime}}"
+        bindchange="onReadingTimeChange"
+      >
+        <view class="picker-value">
+          {{readingTime || '选择时间'}}
+        </view>
+      </picker>
     </view>
 
     <!-- 读书笔记 -->

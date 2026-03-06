@@ -140,12 +140,33 @@
   transform: scale(0.98);
 }
 
+.book-info {
+  flex: 1;
+  min-width: 0;
+}
+
 .book-name {
   font-size: 28rpx;
   font-weight: 500;
   color: #333;
-  flex: 1;
   line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: block;
+}
+
+.book-meta {
+  font-size: 22rpx;
+  color: #999;
+  margin-top: 6rpx;
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.meta-separator {
+  color: #ccc;
 }
 
 .book-pages {

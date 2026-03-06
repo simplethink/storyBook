@@ -27,6 +27,7 @@
         <view class="record-meta">
           <text class="pages">P{{item.startPage}}-{{item.endPage}}</text>
           <text class="duration">{{item.duration}}分钟</text>
+          <text class="time" wx:if="{{item.readingTime}}">🕐 {{item.readingTime}}</text>
         </view>
         <view class="note" wx:if="{{item.note}}">
           <text>{{item.note}}</text>

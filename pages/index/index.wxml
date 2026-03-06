@@ -19,7 +19,14 @@
       <view class="card-content">
         <view class="book-list">
           <view class="book-item" wx:for="{{todayRecords}}" wx:key="id">
-            <text class="book-name">{{item.bookName}}</text>
+            <view class="book-info">
+              <text class="book-name">{{item.bookName}}</text>
+              <view class="book-meta" wx:if="{{item.readingTime || item.duration}}">
+                <text wx:if="{{item.readingTime}}">🕐 {{item.readingTime}}</text>
+                <text wx:if="{{item.duration && item.duration > 0}}" class="meta-separator">·</text>
+                <text wx:if="{{item.duration && item.duration > 0}}">{{item.duration}}分钟</text>
+              </view>
+            </view>
             <text class="book-pages" wx:if="{{item.endPage > item.startPage}}">P{{item.startPage}}-{{item.endPage}}</text>
           </view>
         </view>

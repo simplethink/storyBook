@@ -87,11 +87,13 @@
 
 .record-meta {
   display: flex;
-  gap: 20rpx;
+  gap: 16rpx;
+  align-items: center;
   margin-bottom: 15rpx;
+  flex-wrap: wrap;
 }
 
-.pages, .duration {
+.pages, .duration, .time {
   font-size: 24rpx;
   color: #666;
   padding: 8rpx 16rpx;
