@@ -124,13 +124,22 @@
 .features-section {
   display: flex;
   justify-content: space-around;
-  padding: 20rpx 0;
+  padding: 40rpx 20rpx 20rpx;
 }
 
 .feature-item {
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 20rpx 30rpx;
+  border-radius: 16rpx;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.feature-item:active {
+  background: rgba(102, 126, 234, 0.1);
+  transform: scale(0.95);
 }
 
 .feature-icon {

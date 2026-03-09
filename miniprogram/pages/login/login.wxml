@@ -38,15 +38,15 @@
 
     <!-- 功能说明 -->
     <view class="features-section">
-      <view class="feature-item">
+      <view class="feature-item" bindtap="goToCalendar">
         <text class="feature-icon">📅</text>
         <text class="feature-text">阅读日历</text>
       </view>
-      <view class="feature-item">
+      <view class="feature-item" bindtap="goToReviewTasks">
         <text class="feature-icon">⏰</text>
         <text class="feature-text">复习提醒</text>
       </view>
-      <view class="feature-item">
+      <view class="feature-item" bindtap="goToStats">
         <text class="feature-icon">📊</text>
         <text class="feature-text">数据统计</text>
       </view>

@@ -1,6 +1,7 @@
 // pages/editRecord/editRecord.js
 const app = getApp()
 const util = require('../../utils/util.js')
+const bookApi = require('../../utils/bookApi.js')
 
 Page({
   data: {
@@ -143,13 +144,60 @@ Page({
       })
       
       if (res.result) {
+        const isbn = res.result
+        console.log('扫描到 ISBN:', isbn)
+        
+        // 设置 ISBN
         this.setData({
-          isbn: res.result
+          isbn: isbn
         })
-        wx.showToast({
-          title: '扫描成功',
-          icon: 'success'
+        
+        // 显示加载提示
+        wx.showLoading({
+          title: '查询图书信息...',
+          mask: true
         })
+        
+        try {
+          // 调用 API 获取图书信息
+          const bookInfo = await bookApi.getBookByISBN(isbn)
+          
+          wx.hideLoading()
+          
+          if (bookInfo && bookInfo.title) {
+            console.log('获取到图书信息:', bookInfo)
+            
+            // 回显到页面
+            this.setData({
+              bookName: bookInfo.title || '',
+              author: bookInfo.author || '',
+              publisher: bookInfo.publisher || '',
+              coverUrl: bookInfo.cover || '',
+              // summary: bookInfo.summary || '',  // 如果需要可以添加
+              // price: bookInfo.price || '',     // 如果需要可以添加
+              // pages: bookInfo.pages || 0,      // 如果需要可以添加
+            })
+            
+            wx.showToast({
+              title: '获取成功',
+              icon: 'success'
+            })
+          } else {
+            console.log('未找到图书信息')
+            wx.showToast({
+              title: '未找到该图书信息',
+              icon: 'none',
+              duration: 2000
+            })
+          }
+        } catch (err) {
+          wx.hideLoading()
+          console.error('查询图书信息失败:', err)
+          wx.showToast({
+            title: '查询失败，请手动输入',
+            icon: 'none'
+          })
+        }
       }
     } catch (err) {
       if (err.errMsg !== 'scanCode:fail cancel') {

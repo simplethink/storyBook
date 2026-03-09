@@ -3,6 +3,10 @@
  * 使用免费的第三方 API 获取图书信息
  */
 
+// ISBN查询接口（已测试可用）
+const ISBN_API_BASE = 'http://data.isbn.work/openApi/getInfoByIsbn'
+const ISBN_API_KEY = 'ae1718d4587744b0b79f940fbef69e77'
+
 const DOUBAN_API_BASE = 'https://api.douban.com'
 const GOOGLE_BOOKS_API_BASE = 'https://www.googleapis.com/books/v1'
 
@@ -13,13 +17,10 @@ const GOOGLE_BOOKS_API_BASE = 'https://www.googleapis.com/books/v1'
  */
 async function getBookByISBN(isbn) {
   try {
-    // 尝试使用豆瓣 API（需要 API Key）
-    // 如果没有 API Key，可以使用其他免费 API
-    
-    // 方案 1: 豆瓣 API（推荐，但需要申请 API Key）
-    const doubanResult = await fetchFromDouban(isbn)
-    if (doubanResult) {
-      return doubanResult
+    // 方案 1: 使用国内免费 ISBN 接口（推荐，已测试可用）
+    const isbnResult = await fetchFromISBNAPI(isbn)
+    if (isbnResult && isbnResult.bookName) {
+      return isbnResult
     }
 
     // 方案 2: Google Books API（免费，无需 Key）
@@ -42,7 +43,67 @@ async function getBookByISBN(isbn) {
 }
 
 /**
- * 从豆瓣 API 获取图书信息
+ * 从国内免费 ISBN API 获取图书信息（推荐）
+ */
+async function fetchFromISBNAPI(isbn) {
+  try {
+    console.log('开始请求 ISBN API:', isbn)
+    
+    const response = await wx.request({
+      url: ISBN_API_BASE,
+      data: {
+        isbn: isbn,
+        appKey: ISBN_API_KEY
+      },
+      method: 'GET',
+      success: (res) => {
+        console.log('✓ 请求成功，statusCode:', res.statusCode)
+        console.log('返回数据:', res.data)
+      },
+      fail: (err) => {
+        console.error('✗ 请求失败:', err.errMsg)
+        console.error('完整错误:', err)
+        // 抛出错误让上层捕获
+        throw new Error('网络请求失败：' + err.errMsg)
+      }
+    })
+
+    console.log('response:', response)
+
+    if (response && response.statusCode === 200 && response.data) {
+      const result = response.data
+      
+      if (result.code === 0 && result.data) {
+        const book = result.data
+        const pictures = book.pictures ? JSON.parse(book.pictures) : []
+        
+        return {
+          title: book.bookName || '',
+          author: book.author || '',
+          publisher: book.press || '',
+          isbn: book.isbn || isbn,
+          cover: pictures[0] || '',
+          summary: book.bookDesc || '',
+          price: book.price ? (book.price / 100).toFixed(2) : '',
+          pages: book.pages || '',
+          pubdate: book.pressDate || '',
+          binding: book.binding || '',
+          language: book.language || ''
+        }
+      } else {
+        console.log('API 返回错误 code:', result.code)
+      }
+    }
+  } catch (error) {
+    console.error('ISBN API 异常:', error.message || error)
+    console.log('请检查：1.域名是否已配置 2.网络是否正常')
+  }
+  
+  return null
+}
+
+/**
+ * 从豆瓣API 获取图书信息
  */
 async function fetchFromDouban(isbn) {
   // 注意：豆瓣 API 需要 API Key，请自行申请

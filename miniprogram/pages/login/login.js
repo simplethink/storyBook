@@ -8,12 +8,19 @@ Page({
   },
 
   onLoad() {
+    console.log('登录页面 onLoad')
     // 检查是否已经登录
-    if (app.globalData.userInfo) {
-      this.setData({
-        userInfo: app.globalData.userInfo,
-        hasUserInfo: true
-      })
+    if (app.globalData.userInfo && app.globalData.hasLogin) {
+      console.log('用户已登录，自动跳转首页')
+      // 延迟一下，确保页面渲染完成
+      setTimeout(() => {
+        wx.navigateTo({
+          url: '/pages/index/index',
+          fail: (err) => {
+            console.error('跳转首页失败:', err)
+          }
+        })
+      }, 500)
     }
   },
 
@@ -74,7 +81,58 @@ Page({
 
   // 进入首页
   enterHome() {
-    wx.switchTab({
+    console.log('点击进入首页')
+    wx.navigateTo({
+      url: '/pages/index/index'
+    })
+  },
+  
+  // 跳转到日历页面
+  goToCalendar() {
+    console.log('跳转到阅读日历')
+    // 如果未登录，提示先登录
+    if (!this.data.hasUserInfo) {
+      wx.showToast({
+        title: '请先登录',
+        icon: 'none'
+      })
+      return
+    }
+    wx.navigateTo({
+      url: '/pages/calendar/calendar'
+    })
+  },
+  
+  // 跳转到复习任务页面
+  goToReviewTasks() {
+    console.log('跳转到复习提醒')
+    // 如果未登录，提示先登录
+    if (!this.data.hasUserInfo) {
+      wx.showToast({
+        title: '请先登录',
+        icon: 'none'
+      })
+      return
+    }
+    const today = new Date().toDateString()
+    wx.navigateTo({
+      url: `/pages/recordDetail/recordDetail?date=${encodeURIComponent(today)}`
+    })
+  },
+  
+  // 查看统计（通过首页查看）
+  goToStats() {
+    console.log('跳转到数据统计')
+    // 如果未登录，提示先登录
+    if (!this.data.hasUserInfo) {
+      wx.showToast({
+        title: '请先登录',
+        icon: 'none'
+      })
+      return
+    }
+    // 统计信息在首页显示，所以跳转到首页
+    wx.navigateTo({
       url: '/pages/index/index'
     })
   }
