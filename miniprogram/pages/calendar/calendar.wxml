@@ -1,0 +1,56 @@
+<view class="calendar-container">
+  <!-- 月份选择器 -->
+  <view class="month-selector">
+    <view class="arrow-btn" bindtap="prevMonth">
+      <text class="arrow">‹</text>
+    </view>
+    <view class="month-text">{{currentYear}}年{{currentMonth + 1}}月</view>
+    <view class="arrow-btn" bindtap="nextMonth">
+      <text class="arrow">›</text>
+    </view>
+  </view>
+
+  <!-- 星期标题 -->
+  <view class="weekdays">
+    <view class="weekday">日</view>
+    <view class="weekday">一</view>
+    <view class="weekday">二</view>
+    <view class="weekday">三</view>
+    <view class="weekday">四</view>
+    <view class="weekday">五</view>
+    <view class="weekday">六</view>
+  </view>
+
+  <!-- 日期网格 -->
+  <view class="days-grid">
+    <view 
+      class="day-item {{item.isCurrentMonth ? '' : 'other-month'}} {{item.isToday ? 'today' : ''}} {{item.isSelected ? 'selected' : ''}} {{item.hasRecord ? 'has-record' : ''}}"
+      wx:for="{{daysArray}}" 
+      wx:key="date"
+      bindtap="onDayTap"
+      data-date="{{item.date}}"
+    >
+      <view class="day-number">{{item.day}}</view>
+      <view class="record-indicator" wx:if="{{item.hasRecord}}"></view>
+      <view class="review-dot" wx:if="{{item.hasReviewTask}}"></view>
+    </view>
+  </view>
+
+  <!-- 图例说明 -->
+  <view class="legend">
+    <view class="legend-item">
+      <view class="legend-dot has-record"></view>
+      <text>有阅读记录</text>
+    </view>
+    <view class="legend-item">
+      <view class="legend-dot review-dot"></view>
+      <text>有待复习</text>
+    </view>
+  </view>
+
+  <!-- 底部操作按钮 -->
+  <view class="bottom-actions">
+    <button class="action-btn primary" bindtap="goToToday">回到今天</button>
+    <button class="action-btn" bindtap="addRecord">添加记录</button>
+  </view>
+</view>

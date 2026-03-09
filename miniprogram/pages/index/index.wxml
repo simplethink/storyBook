@@ -1,0 +1,145 @@
+<!--pages/index/index.wxml-->
+<view class="home-container">
+  <!-- 欢迎头部 -->
+  <view class="home-header">
+    <view class="welcome-text">
+      <text class="title">故事书</text>
+      <text class="subtitle">记录你的阅读时光</text>
+    </view>
+  </view>
+
+  <!-- 今日重点（突出显示） -->
+  <view class="today-section">
+    <!-- 今日读书 -->
+    <view class="today-card today-books" bindtap="viewTodayBooks" wx:if="{{todayRecords.length > 0}}">
+      <view class="card-header">
+        <text class="card-icon">📖</text>
+        <text class="card-title">今日读书</text>
+      </view>
+      <view class="card-content">
+        <view class="book-list">
+          <view class="book-item" wx:for="{{todayRecords}}" wx:key="id">
+            <view class="book-info">
+              <text class="book-name">{{item.bookName}}</text>
+              <view class="book-meta" wx:if="{{item.readingTime || item.duration}}">
+                <text wx:if="{{item.readingTime}}">🕐 {{item.readingTime}}</text>
+                <text wx:if="{{item.duration && item.duration > 0}}" class="meta-separator">·</text>
+                <text wx:if="{{item.duration && item.duration > 0}}">{{item.duration}}分钟</text>
+              </view>
+            </view>
+            <text class="book-pages" wx:if="{{item.endPage > item.startPage}}">P{{item.startPage}}-{{item.endPage}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+    <view class="today-card today-books" wx:else>
+      <view class="card-header">
+        <text class="card-icon">📖</text>
+        <text class="card-title">今日读书</text>
+      </view>
+      <view class="card-empty">
+        <text class="empty-tip">今天还没读书哦~</text>
+        <button class="quick-add-btn" bindtap="addRecord">立即添加</button>
+      </view>
+    </view>
+
+    <!-- 今日复习 -->
+    <view class="today-card today-review" bindtap="viewTodayReview" wx:if="{{todayReviewTasks.length > 0}}">
+      <view class="card-header">
+        <text class="card-icon">⏰</text>
+        <text class="card-title">今日复习</text>
+        <text class="review-count">{{todayReviewTasks.length}}本待复习</text>
+      </view>
+      <view class="card-content">
+        <view class="task-list">
+          <view class="task-item" wx:for="{{todayReviewTasks}}" wx:key="id">
+            <text class="task-book">{{item.bookName}}</text>
+            <text class="task-stage">第{{item.stage}}次</text>
+          </view>
+        </view>
+        <button class="go-review-btn" bindtap="viewReviewTasks" catchtap="stopPropagation">开始复习</button>
+      </view>
+    </view>
+    <view class="today-card today-review" wx:else>
+      <view class="card-header">
+        <text class="card-icon">⏰</text>
+        <text class="card-title">今日复习</text>
+      </view>
+      <view class="card-empty">
+        <text class="empty-tip">太棒了！今天没有复习任务 🎉</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 功能卡片（弱化） -->
+  <view class="function-grid faded">
+    <view class="function-card" bindtap="goToCalendar">
+      <view class="card-icon">📅</view>
+      <view class="card-title">阅读日历</view>
+      <view class="card-desc">查看和管理每日阅读记录</view>
+    </view>
+
+    <view class="function-card" bindtap="addRecord">
+      <view class="card-icon">📖</view>
+      <view class="card-title">添加记录</view>
+      <view class="card-desc">快速记录今天的阅读</view>
+    </view>
+
+    <view class="function-card" bindtap="viewReviewTasks">
+      <view class="card-icon">⏰</view>
+      <view class="card-title">复习提醒</view>
+      <view class="card-desc">艾宾浩斯记忆法复习计划</view>
+    </view>
+
+    <view class="function-card" bindtap="goToSettings">
+      <view class="card-icon">⚙️</view>
+      <view class="card-title">设置</view>
+      <view class="card-desc">管理自动生成复习任务</view>
+    </view>
+  </view>
+
+  <!-- 统计信息（弱化） -->
+  <view class="stats-section faded">
+    <view class="stats-title">阅读统计</view>
+    <view class="stats-cards">
+      <view class="stat-card">
+        <view class="stat-value">{{stats.totalBooks}}</view>
+        <view class="stat-label">已读书籍</view>
+      </view>
+      <view class="stat-card">
+        <view class="stat-value">{{stats.totalDays}}</view>
+        <view class="stat-label">坚持天数</view>
+      </view>
+      <view class="stat-card">
+        <view class="stat-value">{{stats.pendingReviews}}</view>
+        <view class="stat-label">待复习</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 最近记录（弱化） -->
+  <view class="recent-section faded">
+    <view class="section-header">
+      <text class="section-title">最近记录</text>
+      <text class="view-all" bindtap="viewAllRecords">查看全部</text>
+    </view>
+    <view class="recent-list" wx:if="{{recentRecords.length > 0}}">
+      <view 
+        class="recent-item"
+        wx:for="{{recentRecords}}"
+        wx:key="id"
+        bindtap="viewRecordDetail"
+        data-record="{{item}}"
+      >
+        <image class="recent-cover" src="{{item.coverUrl}}" mode="aspectFill" wx:if="{{item.coverUrl}}"></image>
+        <view class="recent-info" wx:if="{{!item.coverUrl}}">
+          <text class="recent-book">{{item.bookName}}</text>
+          <text class="recent-date">{{item.dateStr}}</text>
+        </view>
+      </view>
+    </view>
+    <view class="empty-recent" wx:else>
+      <text class="empty-text">暂无阅读记录，快去添加吧~</text>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,114 @@
+<view class="edit-container">
+  <view class="form-section">
+    <!-- 图书封面 -->
+    <view class="cover-section">
+      <view class="cover-upload" bindtap="chooseCover" wx:if="{{!coverUrl}}">
+        <text class="upload-icon">📷</text>
+        <text class="upload-text">点击上传封面</text>
+      </view>
+      <image class="cover-image" src="{{coverUrl}}" mode="aspectFill" wx:else></image>
+    </view>
+
+    <!-- 图书信息 -->
+    <view class="form-group">
+      <view class="form-label">图书名称 <text class="required">*</text></view>
+      <input 
+        class="form-input" 
+        placeholder="请输入图书名称" 
+        value="{{bookName}}"
+        bindinput="onBookNameInput"
+      />
+    </view>
+
+    <view class="form-group">
+      <view class="form-label">作者</view>
+      <input 
+        class="form-input" 
+        placeholder="请输入作者" 
+        value="{{author}}"
+        bindinput="onAuthorInput"
+      />
+    </view>
+
+    <view class="form-group">
+      <view class="form-label">ISBN</view>
+      <view class="isbn-input-wrapper">
+        <input 
+          class="form-input" 
+          placeholder="请输入或扫描 ISBN 条形码" 
+          value="{{isbn}}"
+          bindinput="onIsbnInput"
+        />
+        <view class="scan-btn" bindtap="scanISBN">
+          <text class="scan-icon">📷</text>
+          <text class="scan-text">扫码</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 阅读进度 -->
+    <view class="form-row">
+      <view class="form-group half">
+        <view class="form-label">开始页码</view>
+        <input 
+          class="form-input" 
+          type="number"
+          placeholder="0" 
+          value="{{startPage}}"
+          bindinput="onStartPageInput"
+        />
+      </view>
+      <view class="form-group half">
+        <view class="form-label">结束页码</view>
+        <input 
+          class="form-input" 
+          type="number"
+          placeholder="0" 
+          value="{{endPage}}"
+          bindinput="onEndPageInput"
+        />
+      </view>
+    </view>
+
+    <view class="form-group">
+      <view class="form-label">阅读时长（分钟）</view>
+      <input 
+        class="form-input" 
+        type="number"
+        placeholder="例如：30" 
+        value="{{duration}}"
+        bindinput="onDurationInput"
+      />
+    </view>
+
+    <view class="form-group">
+      <view class="form-label">阅读时间</view>
+      <picker 
+        mode="time" 
+        value="{{readingTime}}"
+        bindchange="onReadingTimeChange"
+      >
+        <view class="picker-value">
+          {{readingTime || '选择时间'}}
+        </view>
+      </picker>
+    </view>
+
+    <!-- 读书笔记 -->
+    <view class="form-group">
+      <view class="form-label">读书笔记</view>
+      <textarea 
+        class="form-textarea" 
+        placeholder="记录你的感悟、笔记..." 
+        value="{{note}}"
+        maxlength="1000"
+        bindinput="onNoteInput"
+      />
+    </view>
+
+    <!-- 保存按钮 -->
+    <view class="save-btn-wrapper">
+      <button class="save-btn" bindtap="saveRecord" disabled="{{!bookName}}">保存记录</button>
+    </view>
+  </view>
+</view>

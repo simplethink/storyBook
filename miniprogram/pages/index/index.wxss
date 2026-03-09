@@ -1,0 +1,460 @@
+/* 首页样式 */
+.home-container {
+  padding: 0;
+  background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  padding-bottom: 40rpx;
+}
+
+/* 欢迎头部 */
+.home-header {
+  padding: 80rpx 30rpx 40rpx;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10rpx);
+  margin: 0 20rpx 30rpx;
+  border-radius: 24rpx;
+}
+
+.welcome-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.title {
+  font-size: 64rpx;
+  font-weight: bold;
+  color: #fff;
+  margin-bottom: 12rpx;
+  letter-spacing: 2rpx;
+}
+
+.subtitle {
+  font-size: 26rpx;
+  color: rgba(255, 255, 255, 0.95);
+  font-weight: 300;
+}
+
+/* 今日重点（突出显示） */
+.today-section {
+  margin: 0 20rpx 30rpx;
+}
+
+.today-card {
+  background: rgba(255, 255, 255, 0.98);
+  border-radius: 20rpx;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.08);
+  backdrop-filter: blur(20rpx);
+  transition: all 0.3s ease;
+}
+
+.today-card:active {
+  transform: scale(0.98);
+}
+
+.today-books {
+  position: relative;
+  overflow: hidden;
+}
+
+.today-books::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 8rpx;
+  background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+}
+
+.today-review {
+  position: relative;
+  overflow: hidden;
+}
+
+.today-review::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 8rpx;
+  background: linear-gradient(180deg, #f093fb 0%, #f5576c 100%);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  margin-bottom: 20rpx;
+  padding-bottom: 20rpx;
+  border-bottom: 2rpx solid rgba(0, 0, 0, 0.05);
+}
+
+.card-icon {
+  font-size: 44rpx;
+  line-height: 1;
+}
+
+.card-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333;
+  flex: 1;
+}
+
+.review-count {
+  font-size: 22rpx;
+  color: #f5576c;
+  background: linear-gradient(135deg, #ffeef8 0%, #fff5f0 100%);
+  padding: 6rpx 14rpx;
+  border-radius: 16rpx;
+  font-weight: 500;
+  box-shadow: 0 2rpx 8rpx rgba(245, 87, 108, 0.15);
+}
+
+.card-content {
+  min-height: 100rpx;
+}
+
+.book-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.book-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24rpx 28rpx;
+  background: linear-gradient(135deg, #f8faff 0%, #f0f4ff 100%);
+  border-radius: 16rpx;
+  transition: all 0.3s ease;
+}
+
+.book-item:active {
+  transform: scale(0.98);
+}
+
+.book-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.book-name {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #333;
+  line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: block;
+}
+
+.book-meta {
+  font-size: 22rpx;
+  color: #999;
+  margin-top: 6rpx;
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.meta-separator {
+  color: #ccc;
+}
+
+.book-pages {
+  font-size: 22rpx;
+  color: #667eea;
+  font-weight: 500;
+  padding: 8rpx 16rpx;
+  background-color: rgba(102, 126, 234, 0.08);
+  border-radius: 12rpx;
+  white-space: nowrap;
+  margin-left: 16rpx;
+}
+
+.task-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+}
+
+.task-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24rpx 28rpx;
+  background: linear-gradient(135deg, #fff5f8 0%, #fef0f5 100%);
+  border-radius: 16rpx;
+  transition: all 0.3s ease;
+}
+
+.task-item:active {
+  transform: scale(0.98);
+}
+
+.task-book {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #333;
+  flex: 1;
+  line-height: 1.4;
+}
+
+.task-stage {
+  font-size: 22rpx;
+  color: #f5576c;
+  font-weight: 500;
+  padding: 8rpx 16rpx;
+  background-color: rgba(245, 87, 108, 0.08);
+  border-radius: 12rpx;
+  white-space: nowrap;
+  margin-left: 16rpx;
+}
+
+.card-empty {
+  padding: 50rpx 20rpx;
+  text-align: center;
+}
+
+.empty-tip {
+  display: block;
+  font-size: 26rpx;
+  color: #999;
+  margin-bottom: 24rpx;
+  line-height: 1.6;
+}
+
+.quick-add-btn,
+.go-review-btn {
+  width: 300rpx;
+  height: 76rpx;
+  line-height: 76rpx;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+  font-size: 30rpx;
+  font-weight: 500;
+  border-radius: 40rpx;
+  border: none;
+  margin: 0 auto;
+  box-shadow: 0 8rpx 24rpx rgba(102, 126, 234, 0.3);
+  transition: all 0.3s ease;
+}
+
+.quick-add-btn:active,
+.go-review-btn:active {
+  transform: scale(0.95);
+}
+
+.go-review-btn {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  box-shadow: 0 8rpx 24rpx rgba(245, 87, 108, 0.3);
+}
+
+/* 阻止事件冒泡 */
+.stop-propagation {
+  pointer-events: auto;
+}
+
+/* 功能卡片（弱化效果） */
+.function-grid.faded {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16rpx;
+  opacity: 0.65;
+  margin: 0 20rpx 30rpx;
+  transition: all 0.3s ease;
+}
+
+.function-grid.faded .function-card {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 20rpx;
+  padding: 30rpx 20rpx;
+  text-align: center;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.06);
+  backdrop-filter: blur(10rpx);
+}
+
+.function-grid.faded .function-card:active {
+  transform: scale(0.95);
+}
+
+.function-grid.faded .card-icon {
+  font-size: 64rpx;
+  margin-bottom: 16rpx;
+}
+
+.function-grid.faded .card-title {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 8rpx;
+}
+
+.function-grid.faded .card-desc {
+  font-size: 22rpx;
+  color: #999;
+  line-height: 1.4;
+}
+
+/* 统计信息（弱化效果） */
+.stats-section.faded {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 20rpx;
+  padding: 30rpx;
+  opacity: 0.65;
+  margin: 0 20rpx 30rpx;
+  backdrop-filter: blur(10rpx);
+}
+
+.stats-section.faded .stats-title {
+  color: #666;
+  font-size: 28rpx;
+  margin-bottom: 24rpx;
+}
+
+.stats-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 30rpx;
+}
+
+.stats-cards {
+  display: flex;
+  justify-content: space-around;
+  gap: 20rpx;
+}
+
+.stat-card {
+  text-align: center;
+  flex: 1;
+  padding: 20rpx 10rpx;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 16rpx;
+}
+
+.stat-value {
+  font-size: 44rpx;
+  font-weight: bold;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 8rpx;
+}
+
+.stat-label {
+  font-size: 22rpx;
+  color: #999;
+}
+
+/* 最近记录（弱化效果） */
+.recent-section.faded {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 20rpx;
+  padding: 30rpx;
+  opacity: 0.65;
+  margin: 0 20rpx 40rpx;
+  backdrop-filter: blur(10rpx);
+}
+
+.recent-section.faded .section-title {
+  color: #666;
+  font-size: 28rpx;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24rpx;
+  padding-bottom: 20rpx;
+  border-bottom: 2rpx solid rgba(0, 0, 0, 0.05);
+}
+
+.section-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+.view-all {
+  font-size: 24rpx;
+  color: #667eea;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.view-all:active {
+  opacity: 0.7;
+}
+
+.recent-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.recent-item {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  padding: 20rpx;
+  background: linear-gradient(135deg, #fafbff 0%, #f5f7ff 100%);
+  border-radius: 16rpx;
+  transition: all 0.3s ease;
+}
+
+.recent-item:active {
+  transform: scale(0.98);
+}
+
+.recent-cover {
+  width: 90rpx;
+  height: 120rpx;
+  border-radius: 12rpx;
+  background-color: #f0f0f0;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.08);
+  flex-shrink: 0;
+}
+
+.recent-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.recent-book {
+  display: block;
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 8rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.recent-date {
+  display: block;
+  font-size: 22rpx;
+  color: #999;
+}
+
+.empty-recent {
+  padding: 80rpx 20rpx;
+  text-align: center;
+}
+
+.empty-text {
+  font-size: 26rpx;
+  color: #aaa;
+  line-height: 1.6;
+}
