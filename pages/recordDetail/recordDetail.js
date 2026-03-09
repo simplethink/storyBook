@@ -71,14 +71,57 @@ Page({
     
     try {
       const res = await wx.scanCode({
-        onlyFromCamera: false,
-        checkResult: true
+        scanType: ['barCode']
       })
       
       if (res.result) {
-        console.log('扫描结果:', res.result)
-        // 调用图书 API 获取信息
-        this.fetchBookInfoByBarcode(res.result)
+        // 显示加载提示
+        wx.showLoading({
+          title: '查询中...',
+          mask: true
+        })
+        
+        try {
+          // 调用图书 API 获取信息
+          const bookInfo = await bookApi.getBookByISBN(res.result)
+          
+          wx.hideLoading()
+          
+          if (bookInfo && bookInfo.title) {
+            // 跳转到编辑页面并传递图书信息
+            wx.navigateTo({
+              url: `/pages/editRecord/editRecord?date=${encodeURIComponent(this.data.selectedDate)}&bookInfo=${encodeURIComponent(JSON.stringify(bookInfo))}`
+            })
+            
+            wx.showToast({
+              title: '获取成功',
+              icon: 'success'
+            })
+          } else {
+            // 未查询到图书信息
+            wx.showModal({
+              title: '提示',
+              content: '未找到图书信息，是否手动输入？',
+              success: (modalRes) => {
+                if (modalRes.confirm) {
+                  this.manualAdd()
+                }
+              }
+            })
+          }
+        } catch (err) {
+          console.error('查询图书信息失败:', err)
+          wx.hideLoading()
+          wx.showModal({
+            title: '提示',
+            content: '查询失败，是否手动输入？',
+            success: (modalRes) => {
+              if (modalRes.confirm) {
+                this.manualAdd()
+              }
+            }
+          })
+        }
       }
     } catch (err) {
       if (err.errMsg !== 'scanCode:fail cancel') {
@@ -123,48 +166,6 @@ Page({
     wx.navigateTo({
       url: `/pages/editRecord/editRecord?date=${encodeURIComponent(this.data.selectedDate)}`
     })
-  },
-
-  // 通过条形码获取图书信息
-  async fetchBookInfoByBarcode(barcode) {
-    wx.showLoading({ title: '获取图书信息...' })
-    
-    try {
-      const bookInfo = await bookApi.getBookByISBN(barcode)
-      
-      wx.hideLoading()
-      
-      if (bookInfo && bookInfo.title) {
-        this.setData({ currentBook: bookInfo })
-        
-        // 跳转到编辑页面
-        wx.navigateTo({
-          url: `/pages/editRecord/editRecord?date=${encodeURIComponent(this.data.selectedDate)}&bookInfo=${encodeURIComponent(JSON.stringify(bookInfo))}`
-        })
-      } else {
-        wx.showModal({
-          title: '提示',
-          content: '未找到图书信息，是否手动输入？',
-          success: (res) => {
-            if (res.confirm) {
-              this.manualAdd()
-            }
-          }
-        })
-      }
-    } catch (error) {
-      wx.hideLoading()
-      console.error('获取图书信息失败:', error)
-      wx.showModal({
-        title: '提示',
-        content: '获取图书信息失败，是否手动输入？',
-        success: (res) => {
-          if (res.confirm) {
-            this.manualAdd()
-          }
-        }
-      })
-    }
   },
 
   // 添加复习任务

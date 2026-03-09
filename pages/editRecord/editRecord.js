@@ -143,13 +143,53 @@ Page({
       })
       
       if (res.result) {
-        this.setData({
-          isbn: res.result
+        // 显示加载提示
+        wx.showLoading({
+          title: '查询中...',
+          mask: true
         })
-        wx.showToast({
-          title: '扫描成功',
-          icon: 'success'
-        })
+        
+        try {
+          // 调用 ISBN查询接口获取图书信息
+          const bookInfo = await this.getBookInfoByISBN(res.result)
+          
+          if (bookInfo && bookInfo.bookName) {
+            // 自动填充图书信息
+            this.setData({
+              isbn: res.result,
+              bookName: bookInfo.bookName,
+              author: bookInfo.author || '',
+              coverUrl: bookInfo.pictures ? JSON.parse(bookInfo.pictures)[0] : ''
+            })
+            
+            wx.hideLoading()
+            wx.showToast({
+              title: '获取成功',
+              icon: 'success'
+            })
+          } else {
+            // 未查询到图书信息，只填充 ISBN
+            this.setData({
+              isbn: res.result
+            })
+            wx.hideLoading()
+            wx.showToast({
+              title: '未找到图书信息，请手动输入',
+              icon: 'none'
+            })
+          }
+        } catch (err) {
+          console.error('查询图书信息失败:', err)
+          wx.hideLoading()
+          wx.showToast({
+            title: '查询失败，请手动输入',
+            icon: 'none'
+          })
+          // 至少填充 ISBN
+          this.setData({
+            isbn: res.result
+          })
+        }
       }
     } catch (err) {
       if (err.errMsg !== 'scanCode:fail cancel') {
@@ -159,6 +199,30 @@ Page({
         })
       }
     }
+  },
+
+  // 通过 ISBN 获取图书信息
+  getBookInfoByISBN(isbn) {
+    return new Promise((resolve, reject) => {
+      wx.request({
+        url: 'http://data.isbn.work/openApi/getInfoByIsbn',
+        data: {
+          isbn: isbn,
+          appKey: 'ae1718d4587744b0b79f940fbef69e77'
+        },
+        method: 'GET',
+        success: (res) => {
+          if (res.statusCode === 200 && res.data.code === 0) {
+            resolve(res.data.data)
+          } else {
+            reject(new Error('查询失败'))
+          }
+        },
+        fail: (err) => {
+          reject(err)
+        }
+      })
+    })
   },
 
   onNoteInput(e) {
