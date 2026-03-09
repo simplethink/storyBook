@@ -2,6 +2,8 @@ const util = require('../../utils/util.js')
 
 Page({
   data: {
+    userInfo: null,
+    hasLogin: false,
     stats: {
       totalBooks: 0,
       totalDays: 0,
@@ -13,9 +15,83 @@ Page({
   },
 
   onLoad() {
+    // 获取用户信息
+    this.loadUserInfo()
+    
+    // 从云端同步数据（如果有网络）
+    this.syncDataFromCloud()
+    
     this.loadTodayData()
     this.loadStats()
     this.loadRecentRecords()
+  },
+  
+  // 加载用户信息
+  loadUserInfo() {
+    const app = getApp()
+    if (app.globalData.userInfo) {
+      this.setData({
+        userInfo: app.globalData.userInfo,
+        hasLogin: app.globalData.hasLogin
+      })
+    } else {
+      // 尝试从云函数获取
+      app.getUserInfo((userInfo) => {
+        if (userInfo) {
+          this.setData({
+            userInfo: userInfo,
+            hasLogin: true
+          })
+        }
+      })
+    }
+  },
+  
+  // 从云端同步数据
+  syncDataFromCloud() {
+    const app = getApp()
+    
+    // 检查是否已登录
+    if (!app.globalData.hasLogin) {
+      console.log('未登录，跳过云端同步')
+      return
+    }
+    
+    wx.showLoading({ title: '同步数据中...' })
+    
+    // 下载读书记录
+    app.downloadReadingRecords(null, null, (readResult) => {
+      if (readResult.success) {
+        console.log('读书记录同步成功', readResult.data)
+        // 重新加载本地数据（因为已经合并到本地了）
+        this.loadTodayData()
+        this.loadStats()
+        this.loadRecentRecords()
+      }
+      
+      // 下载复习任务
+      app.downloadReviewTasks(null, null, (taskResult) => {
+        wx.hideLoading()
+        
+        if (taskResult.success) {
+          console.log('复习任务同步成功', taskResult.data)
+          // 重新加载本地数据
+          this.loadTodayData()
+          this.loadStats()
+        } else {
+          console.log('复习任务同步失败或无需同步')
+        }
+        
+        // 显示同步结果提示
+        if (readResult.success || taskResult.success) {
+          wx.showToast({
+            title: '数据同步完成',
+            icon: 'success',
+            duration: 1500
+          })
+        }
+      })
+    })
   },
 
   // 加载今天的数据（读书和复习任务）
@@ -168,5 +244,7 @@ Page({
     this.loadTodayData()
     this.loadStats()
     this.loadRecentRecords()
+    // 每次打开页面时也同步一次
+    this.syncDataFromCloud()
   }
 })

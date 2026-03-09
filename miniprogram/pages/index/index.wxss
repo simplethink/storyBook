@@ -22,6 +22,26 @@
   align-items: center;
 }
 
+.home-header {
+  padding: 80rpx 30rpx 40rpx;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10rpx);
+  margin: 0 20rpx 30rpx;
+  border-radius: 24rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.avatar {
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 50%;
+  border: 4rpx solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 8rpx 16rpx rgba(0, 0, 0, 0.1);
+}
+
 .title {
   font-size: 64rpx;
   font-weight: bold;

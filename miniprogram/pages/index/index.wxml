@@ -3,9 +3,11 @@
   <!-- 欢迎头部 -->
   <view class="home-header">
     <view class="welcome-text">
-      <text class="title">故事书</text>
+      <text class="title" wx:if="{{!hasLogin}}">故事书</text>
+      <text class="title" wx:else>Hello, {{userInfo.nickName || '朋友'}}</text>
       <text class="subtitle">记录你的阅读时光</text>
     </view>
+    <image class="avatar" src="{{userInfo.avatarUrl || '/images/icons/avatar.png'}}" mode="aspectFill" wx:if="{{hasLogin && userInfo.avatarUrl}}"></image>
   </view>
 
   <!-- 今日重点（突出显示） -->

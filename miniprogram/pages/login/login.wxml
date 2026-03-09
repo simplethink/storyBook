@@ -1,0 +1,55 @@
+<!--pages/login/login.wxml-->
+<view class="login-container">
+  <view class="login-content">
+    <!-- Logo 区域 -->
+    <view class="logo-section">
+      <view class="logo-icon">📚</view>
+      <text class="app-name">故事书</text>
+      <text class="app-desc">记录你的阅读时光</text>
+    </view>
+
+    <!-- 登录按钮 -->
+    <view class="login-actions">
+      <button 
+        class="login-btn" 
+        type="primary" 
+        bindtap="getUserProfile"
+        wx:if="{{!hasUserInfo}}"
+      >
+        <text class="btn-text">微信一键登录</text>
+      </button>
+      
+      <view class="user-info-card" wx:else>
+        <image class="user-avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill"></image>
+        <view class="user-details">
+          <text class="user-name">{{userInfo.nickName}}</text>
+          <text class="welcome-text">欢迎回来！</text>
+        </view>
+      </view>
+      
+      <button 
+        class="enter-home-btn" 
+        bindtap="enterHome"
+        wx:if="{{hasUserInfo}}"
+      >
+        进入首页
+      </button>
+    </view>
+
+    <!-- 功能说明 -->
+    <view class="features-section">
+      <view class="feature-item">
+        <text class="feature-icon">📅</text>
+        <text class="feature-text">阅读日历</text>
+      </view>
+      <view class="feature-item">
+        <text class="feature-icon">⏰</text>
+        <text class="feature-text">复习提醒</text>
+      </view>
+      <view class="feature-item">
+        <text class="feature-icon">📊</text>
+        <text class="feature-text">数据统计</text>
+      </view>
+    </view>
+  </view>
+</view>
