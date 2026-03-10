@@ -1,0 +1,15 @@
+cloudfunctions/getUserInfo/miniprogram_npm/*
+cloudfunctions/getUserInfo/node_modules/*
+cloudfunctions/quickstartFunctions/miniprogram_npm/*
+cloudfunctions/quickstartFunctions/node_modules/*
+cloudfunctions/syncReadingRecords/miniprogram_npm/*
+cloudfunctions/syncReadingRecords/node_modules/*
+cloudfunctions/syncReviewTasks/miniprogram_npm/*
+cloudfunctions/syncReviewTasks/node_modules/*
+miniprogram/node_modules/*
+
+
+cloudfunctions/getUserInfo/package-lock.json
+cloudfunctions/quickstartFunctions/package-lock.json
+cloudfunctions/syncReadingRecords/package-lock.json
+miniprogram/package-lock.json

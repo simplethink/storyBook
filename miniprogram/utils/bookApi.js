@@ -3,6 +3,8 @@
  * 使用免费的第三方 API 获取图书信息
  */
 
+const util = require('./util.js')
+
 // ISBN查询接口（已测试可用）
 const ISBN_API_BASE = 'http://data.isbn.work/openApi/getInfoByIsbn'
 const ISBN_API_KEY = 'ae1718d4587744b0b79f940fbef69e77'
@@ -19,7 +21,7 @@ async function getBookByISBN(isbn) {
   try {
     // 方案 1: 使用国内免费 ISBN 接口（推荐，已测试可用）
     const isbnResult = await fetchFromISBNAPI(isbn)
-    if (isbnResult && isbnResult.bookName) {
+    if (isbnResult  ) {
       return isbnResult
     }
 
@@ -49,26 +51,17 @@ async function fetchFromISBNAPI(isbn) {
   try {
     console.log('开始请求 ISBN API:', isbn)
     
-    const response = await wx.request({
+    const response = await util.request({
       url: ISBN_API_BASE,
       data: {
         isbn: isbn,
         appKey: ISBN_API_KEY
       },
-      method: 'GET',
-      success: (res) => {
-        console.log('✓ 请求成功，statusCode:', res.statusCode)
-        console.log('返回数据:', res.data)
-      },
-      fail: (err) => {
-        console.error('✗ 请求失败:', err.errMsg)
-        console.error('完整错误:', err)
-        // 抛出错误让上层捕获
-        throw new Error('网络请求失败：' + err.errMsg)
-      }
+      method: 'GET'
     })
 
-    console.log('response:', response)
+    console.log('✓ 请求成功，statusCode:', response.statusCode)
+    console.log('返回数据:', response.data)
 
     if (response && response.statusCode === 200 && response.data) {
       const result = response.data
@@ -95,8 +88,9 @@ async function fetchFromISBNAPI(isbn) {
       }
     }
   } catch (error) {
-    console.error('ISBN API 异常:', error.message || error)
-    console.log('请检查：1.域名是否已配置 2.网络是否正常')
+    console.error('✗ 请求失败:', error.message || error)
+    console.error('完整错误:', error)
+    throw new Error('网络请求失败：' + (error.message || error.errMsg))
   }
   
   return null
@@ -110,7 +104,7 @@ async function fetchFromDouban(isbn) {
   const apiKey = 'YOUR_DOUBAN_API_KEY' // 替换为你的 API Key
   
   try {
-    const response = await wx.request({
+    const response = await util.request({
       url: `${DOUBAN_API_BASE}/v2/book/isbn/${isbn}`,
       data: {
         apikey: apiKey
@@ -144,7 +138,7 @@ async function fetchFromDouban(isbn) {
  */
 async function fetchFromGoogleBooks(isbn) {
   try {
-    const response = await wx.request({
+    const response = await util.request({
       url: `${GOOGLE_BOOKS_API_BASE}/volumes?q=isbn:${isbn}`,
       method: 'GET'
     })
@@ -175,7 +169,7 @@ async function fetchFromGoogleBooks(isbn) {
  */
 async function fetchFromOpenLibrary(isbn) {
   try {
-    const response = await wx.request({
+    const response = await util.request({
       url: `https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&format=json&jscmd=data`,
       method: 'GET'
     })
@@ -209,7 +203,7 @@ async function fetchFromOpenLibrary(isbn) {
  */
 async function searchBooks(keyword) {
   try {
-    const response = await wx.request({
+    const response = await util.request({
       url: `${GOOGLE_BOOKS_API_BASE}/volumes?q=${encodeURIComponent(keyword)}&maxResults=20`,
       method: 'GET'
     })

@@ -127,6 +127,21 @@ function isReviewDay(dateStr, readDate) {
   return reviewCycles.includes(daysDiff)
 }
 
+/**
+ * Promise封装wx.request
+ * @param {Object} options - wx.request 参数对象
+ * @returns {Promise<Object>} 返回 Promise 对象，resolve 时为 wx.request 的响应对象
+ */
+function request(options) {
+  return new Promise((resolve, reject) => {
+    wx.request({
+      ...options,
+      success: resolve,
+      fail: reject
+    })
+  })
+}
+
 module.exports = {
   formatDate,
   generateId,
@@ -136,5 +151,6 @@ module.exports = {
   formatDuration,
   getReviewStageName,
   daysBetween,
+    request,
   isReviewDay
 }
