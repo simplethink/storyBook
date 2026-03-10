@@ -25,7 +25,7 @@
     <view class="info-title">💡 艾宾浩斯记忆法</view>
     <view class="info-content">
       <text>根据艾宾浩斯遗忘曲线，系统会在以下时间点自动生成复习任务：</text>
-      <text class="highlight">1 天后、2 天后、4 天后、7 天后、15 天后</text>
+      <text class="highlight">1 天后、2 天后、4 天后、7 天后、15 天后、30 天后、90 天后</text>
       <text class="tip">关闭开关后，仍可手动添加复习任务</text>
     </view>
   </view>

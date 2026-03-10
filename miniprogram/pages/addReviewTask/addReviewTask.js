@@ -9,7 +9,7 @@ Page({
     reviewDate: new Date().toISOString().split('T')[0],
     minDate: new Date().toISOString().split('T')[0],
     note: '',
-    stages: ['第 1 次复习（1 天后）', '第 2 次复习（2 天后）', '第 3 次复习（4 天后）', '第 4 次复习（7 天后）', '第 5 次复习（15 天后）']
+    stages: ['第 1 次复习（1 天后）', '第 2 次复习（2 天后）', '第 3 次复习（4 天后）', '第 4 次复习（7 天后）', '第 5 次复习（15 天后）', '第 6 次复习（30 天后）', '第 7 次复习（90 天后）']
   },
 
   onLoad(options) {

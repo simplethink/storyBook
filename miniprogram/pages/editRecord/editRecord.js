@@ -5,46 +5,57 @@ const bookApi = require('../../utils/bookApi.js')
 
 Page({
   data: {
-    date: '',
-    coverUrl: '',
+   date: '',
+   coverUrl: '',
     bookName: '',
     author: '',
     isbn: '',
     startPage: 0,
     endPage: 0,
     duration: 30,
-    readingTime: '', // 阅读时间
+   readingTime: '', // 阅读时间
     note: '',
-    recordId: ''
+   recordId: '',
+  datePickerValue: '' // 日期选择器的值
   },
 
   onLoad(options) {
-    this.setData({ 
-      date: decodeURIComponent(options.date || new Date().toDateString()),
-      recordId: options.recordId
+  const originalDateStr = decodeURIComponent(options.date || new Date().toDateString())
+   this.setData({ 
+    recordId: options.recordId,
+   })
+
+  console.log('编辑页面 onLoad - 原始日期:', originalDateStr, '转换后:', date)
+   const dateObj = new Date(originalDateStr)
+   const date = dateObj.toDateString()
+    
+    this.setData({
+     date: date,
+     datePickerValue: this.formatDatePicker(dateObj),
+     dateDisplay: this.formatDate(date)
     })
 
     // 设置默认阅读时间为当前时间
-    const now = new Date()
-    const hours = String(now.getHours()).padStart(2, '0')
-    const minutes = String(now.getMinutes()).padStart(2, '0')
+   const now = new Date()
+   const hours = String(now.getHours()).padStart(2, '0')
+   const minutes = String(now.getMinutes()).padStart(2, '0')
     this.setData({
-      readingTime: `${hours}:${minutes}`
+     readingTime: `${hours}:${minutes}`
     })
 
     // 如果有传入的图书信息
     if (options.bookInfo) {
       try {
-        const bookInfo = JSON.parse(decodeURIComponent(options.bookInfo))
+       const bookInfo = JSON.parse(decodeURIComponent(options.bookInfo))
         this.setData({
           bookName: bookInfo.title || '',
           author: bookInfo.author || '',
           isbn: bookInfo.isbn || '',
           publisher: bookInfo.publisher || '',
-          coverUrl: bookInfo.cover || ''
+         coverUrl: bookInfo.cover || ''
         })
       } catch (e) {
-        console.error('解析图书信息失败:', e)
+       console.error('解析图书信息失败:', e)
       }
     }
 
@@ -56,29 +67,40 @@ Page({
     // 如果有封面图片
     if (options.coverUrl) {
       this.setData({
-        coverUrl: decodeURIComponent(options.coverUrl)
+       coverUrl: decodeURIComponent(options.coverUrl)
       })
     }
   },
 
+  // 格式化日期选择器格式
+  formatDatePicker(dateObj) {
+  const year = dateObj.getFullYear()
+  const month = String(dateObj.getMonth() + 1).padStart(2, '0')
+  const day = String(dateObj.getDate()).padStart(2, '0')
+   return `${year}-${month}-${day}`
+  },
+
   // 加载已有记录
   loadRecord(recordId) {
-    const allRecords = wx.getStorageSync('readingRecords') || {}
+ const allRecords = wx.getStorageSync('readingRecords') || {}
     
     // 遍历所有日期查找记录
     for (let date in allRecords) {
-      const records = allRecords[date] || []
-      const record = records.find(r => r.id === recordId)
+  const records = allRecords[date] || []
+  const record = records.find(r => r.id === recordId)
       if (record) {
         this.setData({
-          coverUrl: record.coverUrl || '',
-          bookName: record.bookName || '',
+   date: date, // 更新为记录的实际日期
+     coverUrl: record.coverUrl || '',
+      bookName: record.bookName || '',
           author: record.author || '',
           isbn: record.isbn || '',
           startPage: record.startPage || 0,
           endPage: record.endPage || 0,
           duration: record.duration || 30,
-          note: record.note || ''
+          note: record.note || '',
+   datePickerValue: this.formatDatePicker(new Date(date)),
+   dateDisplay: this.formatDate(date)
         })
         break
       }
@@ -263,6 +285,9 @@ Page({
     // 生成或更新复习任务
     this.createReviewTask(recordData)
 
+    // 同步到云函数
+    this.syncToCloud(recordData, recordId)
+
     wx.showToast({
       title: '保存成功',
       icon: 'success'
@@ -273,31 +298,43 @@ Page({
     }, 1500)
   },
 
+  onDateChange(e) {
+    this.setData({ 
+  datePickerValue: e.detail.value,
+  date: new Date(e.detail.value).toDateString(),
+  dateDisplay: this.formatDate(new Date(e.detail.value).toDateString())
+    })
+  },
+
+  formatDate(dateStr) {
+   return util.formatDate(dateStr)
+  },
+
   // 创建复习任务
   createReviewTask(record) {
     // 检查全局开关，如果关闭则不自动生成
-    const app = getApp()
+  const app = getApp()
     if (!app.globalData.autoGenerateReview) {
       return
     }
     
-    const allTasks = wx.getStorageSync('reviewTasks') || {}
+  const allTasks = wx.getStorageSync('reviewTasks') || {}
     
     // 艾宾浩斯记忆法复习周期（天）
-    const reviewCycles = [1, 2, 4, 7, 15]
+  const reviewCycles = [1, 2, 4, 7, 15, 30, 90]
     
     reviewCycles.forEach((days, index) => {
-      const reviewDate = util.addDays(this.data.date, days)
+    const reviewDate = util.addDays(this.data.date, days)
       
       if (!allTasks[reviewDate]) {
         allTasks[reviewDate] = []
       }
       
-      const task = {
+    const task = {
         id: util.generateId(),
-        bookName: record.bookName,
+      bookName: record.bookName,
         stage: index + 1,
-        completed: false,
+      completed: false,
         createTime: Date.now()
       }
       
@@ -305,5 +342,35 @@ Page({
     })
     
     wx.setStorageSync('reviewTasks', allTasks)
+  },
+
+  // 同步记录到云端
+  syncToCloud(recordData, recordId) {
+ const app = getApp()
+    
+    // 准备上传的数据
+ const uploadData = {
+     ...recordData,
+  date: this.data.date // 确保包含日期字段
+   }
+    
+  // 判断是新增还是编辑
+  const action= recordId ? 'update' : 'add'
+  console.log(`开始${action === 'add' ? '新增' : '编辑'}记录并同步到云端:`, uploadData)
+    
+    // 调用云函数同步
+  app.syncReadingRecords(action, [uploadData], (res) => {
+    if (res.success) {
+  console.log(`${action === 'add' ? '新增' : '编辑'}成功:`, res.message)
+    } else {
+  console.error('云端同步失败:', res.errMsg)
+      // 不同步失败不影响本地保存，只是提示一下
+      wx.showToast({
+        title: '本地已保存，云端同步失败',
+        icon: 'none',
+        duration: 2000
+      })
+    }
+  })
   }
 })

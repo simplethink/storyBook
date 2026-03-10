@@ -9,7 +9,7 @@ const db = cloud.database()
 
 /**
  * 同步读书记录到云端
- * event.action: 'upload' | 'download' | 'batchUpload'
+ * event.action: 'add' | 'update' | 'download' | 'delete'
  * event.records: 记录数组（上传时）
  */
 exports.main = async (event, context) => {
@@ -17,44 +17,74 @@ exports.main = async (event, context) => {
   const openid = wxContext.OPENID
   
   try {
-    // 上传本地记录到云端
-    if (event.action === 'upload' || event.action === 'batchUpload') {
-      const records = event.records || []
-      const uploadedRecords = []
+    // 新增记录
+    if (event.action === 'add') {
+     const records = event.records || []
+     const addedRecords = []
       
       for (const record of records) {
         // 检查记录是否已存在
-        const existingRecord = await db.collection('reading_records').where({
+       const existingRecord = await db.collection('reading_records').where({
           openid: openid,
-          bookName: record.bookName,
-          date: record.date,
+         bookName: record.bookName,
+         date: record.date,
           createTime: record.createTime
         }).get()
         
         if (existingRecord.data.length > 0) {
-          // 更新现有记录
-          await db.collection('reading_records').doc(existingRecord.data[0]._id).update({
-            data: record
-          })
-          uploadedRecords.push(record)
+         console.log('记录已存在，跳过:', record.bookName)
+         addedRecords.push(record)
         } else {
           // 添加新记录
-          const newRecord = {
+         const newRecord= {
             ...record,
             openid: openid,
             createTime: record.createTime || Date.now()
           }
-          const result = await db.collection('reading_records').add({
-            data: newRecord
+         const result = await db.collection('reading_records').add({
+           data: newRecord
           })
-          uploadedRecords.push({ ...record, _id: result._id })
+         addedRecords.push({ ...record, _id: result._id })
         }
       }
       
       return {
         success: true,
-        message: `成功同步 ${uploadedRecords.length} 条记录`,
-        data: uploadedRecords
+        message: `成功新增 ${addedRecords.length} 条记录`,
+       data: addedRecords
+      }
+    }
+    
+    // 更新记录
+    if (event.action === 'update') {
+     const records = event.records || []
+     const updatedRecords = []
+      
+      for (const record of records) {
+        // 根据 id 查找并更新
+       const existingRecord = await db.collection('reading_records').where({
+          openid: openid,
+          id: record.id
+        }).get()
+        
+        if (existingRecord.data.length > 0) {
+          // 更新现有记录
+          await db.collection('reading_records').doc(existingRecord.data[0]._id).update({
+           data: {
+              ...record,
+              updateTime: Date.now()
+            }
+          })
+          updatedRecords.push(record)
+        } else {
+         console.log('记录不存在，无法更新:', record.id)
+        }
+      }
+      
+      return {
+        success: true,
+        message: `成功更新 ${updatedRecords.length} 条记录`,
+       data: updatedRecords
       }
     }
     

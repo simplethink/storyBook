@@ -177,9 +177,9 @@ Page({
 
   // 查看记录详情
   viewRecordDetail(e) {
-    const record = e.currentTarget.dataset.record
+   const record= e.currentTarget.dataset.record
     wx.navigateTo({
-      url: `/pages/viewRecord/viewRecord?record=${encodeURIComponent(JSON.stringify(record))}`
+      url: `/pages/viewRecord/viewRecord?record=${encodeURIComponent(JSON.stringify(record))}&date=${encodeURIComponent(this.data.selectedDate)}`
     })
   },
 
@@ -213,7 +213,7 @@ Page({
 
   // 获取复习阶段名称
   getReviewStageName(stage) {
-    const stages = ['初次记忆', '1 天后', '2 天后', '4 天后', '7 天后', '15 天后']
+  const stages = ['初次记忆', '1 天后', '2 天后', '4 天后', '7 天后', '15 天后', '30 天后', '90 天后']
     return stages[stage - 1] || `第${stage}次`
   },
 

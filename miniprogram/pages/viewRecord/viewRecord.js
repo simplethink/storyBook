@@ -3,30 +3,56 @@ const util = require('../../utils/util.js')
 
 Page({
   data: {
-    record: null,
-    dateStr: ''
+  record: null,
+   dateStr: '',
+  readingDate: '' // 显示的阅读日期
   },
 
   onLoad(options) {
-    if (options.record) {
-      try {
-        const record = JSON.parse(decodeURIComponent(options.record))
-        this.setData({ 
-          record,
-          dateStr: options.date || new Date().toDateString()
-        })
-      } catch (e) {
-        console.error('解析记录失败:', e)
-        wx.showToast({
-          title: '数据加载失败',
-          icon: 'none'
-        })
-      }
-    }
+   if (options.record) {
+     try {
+     const record= JSON.parse(decodeURIComponent(options.record))
+       this.setData({ 
+       record,
+       dateStr: options.date || new Date().toDateString()
+       })
+     console.log('viewRecord onLoad - record:', record)
+     console.log('viewRecord onLoad - dateStr:', options.date, 'decoded:', this.data.dateStr)
+      
+      // 设置显示的阅读日期
+      this.setReadingDate(record, options.date)
+     } catch (e) {
+     console.error('解析记录失败:', e)
+       wx.showToast({
+         title: '数据加载失败',
+         icon: 'none'
+       })
+     }
+   }
+  },
+
+  // 设置阅读日期显示
+  setReadingDate(record, dateFromOptions) {
+   let readingDate = ''
+   
+   // 优先使用 record 中的 date 字段（如果存在）
+   if (record.date) {
+   readingDate = record.date
+   } else if (dateFromOptions) {
+    // 其次使用传递过来的 date 参数
+   readingDate = decodeURIComponent(dateFromOptions)
+   } else {
+    // 最后使用默认值
+   readingDate= new Date().toDateString()
+   }
+   
+   this.setData({
+   readingDate: this.formatDate(readingDate)
+   })
   },
 
   formatDate(dateStr) {
-    return util.formatDate(dateStr || this.data.dateStr)
+ return util.formatDate(dateStr || this.data.dateStr)
   },
 
   editRecord() {

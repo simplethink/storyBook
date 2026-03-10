@@ -84,11 +84,11 @@ Page({
         
         // 显示同步结果提示
         if (readResult.success || taskResult.success) {
-          wx.showToast({
-            title: '数据同步完成',
-            icon: 'success',
-            duration: 1500
-          })
+          // wx.showToast({
+          //   title: '数据同步完成',
+          //   icon: 'success',
+          //   duration: 1500
+          // })
         }
       })
     })

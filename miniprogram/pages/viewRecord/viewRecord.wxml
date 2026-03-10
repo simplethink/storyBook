@@ -23,7 +23,7 @@
       </view>
       <view class="meta-item">
         <view class="meta-label">阅读日期</view>
-        <view class="meta-value">{{formatDate(record.dateStr)}}</view>
+        <view class="meta-value">{{readingDate}}</view>
       </view>
     </view>
 

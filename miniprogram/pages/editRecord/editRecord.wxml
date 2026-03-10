@@ -70,6 +70,36 @@
       </view>
     </view>
 
+    <!-- 阅读日期和时间 -->
+    <view class="form-row">
+      <view class="form-group half">
+        <view class="form-label">阅读日期</view>
+        <picker 
+          mode="date" 
+          value="{{datePickerValue}}"
+          start="2020-01-01"
+          end="2099-12-31"
+          bindchange="onDateChange"
+        >
+          <view class="picker-value">
+            {{dateDisplay || '选择日期'}}
+          </view>
+        </picker>
+      </view>
+      <view class="form-group half">
+        <view class="form-label">阅读时间</view>
+        <picker 
+          mode="time" 
+          value="{{readingTime}}"
+          bindchange="onReadingTimeChange"
+        >
+          <view class="picker-value">
+            {{readingTime || '选择时间'}}
+          </view>
+        </picker>
+      </view>
+    </view>
+
     <view class="form-group">
       <view class="form-label">阅读时长（分钟）</view>
       <input 
@@ -79,19 +109,6 @@
         value="{{duration}}"
         bindinput="onDurationInput"
       />
-    </view>
-
-    <view class="form-group">
-      <view class="form-label">阅读时间</view>
-      <picker 
-        mode="time" 
-        value="{{readingTime}}"
-        bindchange="onReadingTimeChange"
-      >
-        <view class="picker-value">
-          {{readingTime || '选择时间'}}
-        </view>
-      </picker>
     </view>
 
     <!-- 读书笔记 -->
