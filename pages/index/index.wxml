@@ -6,6 +6,11 @@
       <text class="title">故事书</text>
       <text class="subtitle">记录你的阅读时光</text>
     </view>
+    <!-- openid 显示区域 -->
+    <view class="openid-section" wx:if="{{openid}}">
+      <text class="openid-label">OpenID:</text>
+      <text class="openid-value">{{openid}}</text>
+    </view>
   </view>
 
   <!-- 今日重点（突出显示） -->

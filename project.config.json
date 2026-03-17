@@ -45,7 +45,7 @@
     "swc": false,
     "disableSWC": true
   },
-  "compileType": "mini-program",
+  "compileType": "miniprogram",
   "libVersion": "3.3.4",
   "appid": "wx7bc4f76d2be44c22",
   "projectname": "storybook",

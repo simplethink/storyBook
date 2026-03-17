@@ -1,4 +1,5 @@
 const util = require('../../utils/util.js')
+const app = getApp()
 
 Page({
   data: {
@@ -9,13 +10,15 @@ Page({
     },
     todayRecords: [],
     todayReviewTasks: [],
-    recentRecords: []
+    recentRecords: [],
+    openid: '' // 新增 openid 字段
   },
 
   onLoad() {
     this.loadTodayData()
     this.loadStats()
     this.loadRecentRecords()
+    this.displayOpenid() // 显示 openid
   },
 
   // 加载今天的数据（读书和复习任务）
@@ -168,5 +171,21 @@ Page({
     this.loadTodayData()
     this.loadStats()
     this.loadRecentRecords()
+  },
+  
+  // 显示 openid
+  displayOpenid() {
+    if (app.globalData.openid) {
+      this.setData({
+        openid: app.globalData.openid
+      })
+    } else {
+      // 如果还没有获取到 openid，等待获取完成后再设置
+      app.getOpenid().then(openid => {
+        this.setData({
+          openid: openid
+        })
+      })
+    }
   }
 })
