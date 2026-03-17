@@ -205,7 +205,7 @@ Page({
   getBookInfoByISBN(isbn) {
     return new Promise((resolve, reject) => {
       wx.request({
-        url: 'http://data.isbn.work/openApi/getInfoByIsbn',
+        url: 'https://data.isbn.work/openApi/getInfoByIsbn',
         data: {
           isbn: isbn,
           appKey: 'ae1718d4587744b0b79f940fbef69e77'

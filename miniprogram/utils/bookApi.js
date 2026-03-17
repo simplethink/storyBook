@@ -4,7 +4,7 @@
  */
 
 // ISBN查询接口（已测试可用）
-const ISBN_API_BASE = 'http://data.isbn.work/openApi/getInfoByIsbn'
+const ISBN_API_BASE = 'https://data.isbn.work/openApi/getInfoByIsbn'
 const ISBN_API_KEY = 'ae1718d4587744b0b79f940fbef69e77'
 
 const DOUBAN_API_BASE = 'https://api.douban.com'
